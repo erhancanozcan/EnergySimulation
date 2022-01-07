@@ -59,7 +59,7 @@ class Home:
         #self.HVAC=Heating(0.10,0.0000022,3,inside_tmp,time_resolution,heater_type)
         
         
-        solar_irradiation_data=pd.read_csv('2784951_42.38_-71.13_2018.csv')
+        solar_irradiation_data=pd.read_csv('EnergySimulation/data/2784951_42.38_-71.13_2018.csv')
         
         solar_irradiation_data=solar_irradiation_data.iloc[:,[5,6,7]]
 
