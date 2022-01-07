@@ -74,19 +74,19 @@ class PV:
         #os.chdir('/Users/can/Desktop/energy/code/solar_data/boston')
         #sys.path.insert(0, '/Users/can/Desktop/energy/code/solar_data/boston/')
         #new_fx_data=pd.read_csv('2784951_42.38_-71.13_2018.csv')  
-        new_fx_data=new_fx_data.iloc[:,[5,6,7]]
+        #new_fx_data=new_fx_data.iloc[:,[5,6,7]]
 
-        new_fx_data.columns=np.char.lower(new_fx_data.iloc[1,:].values.astype('<U5'))
-        new_fx_data=new_fx_data.drop([0,1])
-        new_fx_data['ghi'] = new_fx_data['ghi'].astype(float)
-        new_fx_data['dhi'] = new_fx_data['dhi'].astype(float)
-        new_fx_data['dni'] = new_fx_data['dni'].astype(float)
+        #new_fx_data.columns=np.char.lower(new_fx_data.iloc[1,:].values.astype('<U5'))
+        #new_fx_data=new_fx_data.drop([0,1])
+        #new_fx_data['ghi'] = new_fx_data['ghi'].astype(float)
+        #new_fx_data['dhi'] = new_fx_data['dhi'].astype(float)
+        #new_fx_data['dni'] = new_fx_data['dni'].astype(float)
         new_fx_data=new_fx_data.iloc[:self.how_many_steps,]
 
 
-        update_time_periods=pd.date_range("2018-01-01", "2018-01-31", freq="5min")
-        update_time_periods=update_time_periods[:self.how_many_steps]
-        new_fx_data.index=update_time_periods
+        #update_time_periods=pd.date_range("2018-01-01", "2018-01-31", freq="5min")
+        #update_time_periods=update_time_periods[:self.how_many_steps]
+        #new_fx_data.index=update_time_periods
         # use a ModelChain object to calculate modeling intermediates
         mc = ModelChain(system, fx_model.location)
         

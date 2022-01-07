@@ -17,9 +17,10 @@ class Heating:
     #1 BTU = 1055.056 watt-seconds.
     #1 BTU/h=0.00029 kW or BTU/EER = watts
     #1sq feet requires 20BTU ===> multiple sq feet by 20
-    def __init__(self, gamma1,gamma2,gamma3,inside_temp,time_resolution,heater_type=1):
+    def __init__(self, gamma1,gamma2,gamma3,inside_temp,time_resolution,heater_type=1,heating_season=1):
         self.inside_temp=inside_temp
         self.heater_type=heater_type
+        self.heating_season=heating_season
         self.time_r=time_resolution
         self.gamma1=gamma1
         self.gamma2=gamma2
@@ -61,10 +62,14 @@ class Heating:
             coef=0
             if set_temp[i]==None:
                 coef=0
-            elif set_temp[i]>=outside_temp[i] and tmp < set_temp[i] :
+            #elif set_temp[i]>=outside_temp[i] and tmp < set_temp[i] :
+            #    coef=1
+            #elif set_temp[i]<outside_temp[i] and tmp > set_temp[i] :
+            #    coef=-1  
+            elif self.heating_season==1 and tmp < set_temp[i] :
                 coef=1
-            elif set_temp[i]<outside_temp[i] and tmp > set_temp[i] :
-                coef=-1   
+            elif self.heating_season==-1 and tmp > set_temp[i] :
+                coef=-1                  
             term2=coef*self.gamma2*(self.heater_efficiency*self.power_heater)
             self.load_int.iloc[i,0]=abs(coef)*((self.power_heater)/(60*self.time_r)/1000.0+0*abs(set_temp[i]-tmp)*100)
             

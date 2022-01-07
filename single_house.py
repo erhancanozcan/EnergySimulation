@@ -7,25 +7,27 @@ Created on Sat Jan  1 21:11:39 2022
 """
 import numpy as np
 import pandas as pd
-from EnergySimulation.ewh import SimpleWaterHeater
-from EnergySimulation.ev import ev
-from EnergySimulation.other_appliances import refrigerator
-from EnergySimulation.other_appliances import washing_machine,dryer,oven
-from EnergySimulation.HVAC import Heating
-from EnergySimulation.pv import PV
+from ewh import SimpleWaterHeater
+from ev import ev
+from other_appliances import refrigerator
+from other_appliances import washing_machine,dryer,oven
+from HVAC import Heating
+from pv import PV
 import matplotlib.pyplot as plt
+from datetime import datetime
 
 class Home:
-    def __init__(self,outside_temp,house_type,wh_type=1,ev_type=1,heater_type=1,solar_panel_area=10,inside_tmp=22.0,tap_water_temp=4,time_resolution=15):
+    def __init__(self,outside_temp,house_type,heating_season,dt_obj,wh_type=1,ev_type=1,heater_type=1,solar_panel_area=10,inside_tmp=22.0,tap_water_temp=4,time_resolution=15):
         self.outside_temp=outside_temp
         self.house_type=house_type
+        self.dt_obj=dt_obj
         
         if house_type["insulation"] =="low":
             gamma1=np.random.normal(0.15,0.001)
         elif house_type["insulation"] =="high":
             gamma1=np.random.normal(0.10,0.001)
         if house_type["size"] =="small":
-            gamma2=np.random.normal(0.0000032,0.0000001)
+            gamma2=np.random.normal(0.0000020,0.0000001)
         elif house_type["size"] =="large":
             gamma2=np.random.normal(0.0000020,0.0000001)
         
@@ -53,11 +55,31 @@ class Home:
         
         
         
-        self.HVAC=Heating(gamma1,gamma2,3,inside_tmp,time_resolution,heater_type)
+        self.HVAC=Heating(gamma1,gamma2,3,inside_tmp,time_resolution,heater_type,heating_season)
         #self.HVAC=Heating(0.10,0.0000022,3,inside_tmp,time_resolution,heater_type)
         
         
-        solar_irradiation_data=pd.read_csv('2784951_42.38_-71.13_2018.csv') 
+        solar_irradiation_data=pd.read_csv('/Users/can/Desktop/energy/code/solar_data/boston/2784951_42.38_-71.13_2018.csv')
+        
+        solar_irradiation_data=solar_irradiation_data.iloc[:,[5,6,7]]
+
+        solar_irradiation_data.columns=np.char.lower(solar_irradiation_data.iloc[1,:].values.astype('<U5'))
+        solar_irradiation_data=solar_irradiation_data.drop([0,1])
+        solar_irradiation_data['ghi'] = solar_irradiation_data['ghi'].astype(float)
+        solar_irradiation_data['dhi'] = solar_irradiation_data['dhi'].astype(float)
+        solar_irradiation_data['dni'] = solar_irradiation_data['dni'].astype(float)
+        
+        
+        update_time_periods=pd.date_range("2018-01-01", "2019-01-01", freq="5min")
+        update_time_periods=update_time_periods[:len(update_time_periods)-1]
+        solar_irradiation_data.index=update_time_periods
+        
+        #dt_obj = "07/15/2018"
+        dt_obj=datetime.strptime(dt_obj, '%m/%d/%Y')
+        start_index=np.where(dt_obj.date()==solar_irradiation_data.index.date)[0][0]
+        #solar_irradiation_data=solar_irradiation_data.iloc[start_index:,:].values
+        solar_irradiation_data=solar_irradiation_data.iloc[start_index:,:]
+        
         self.PV=PV(solar_panel_area,15,solar_irradiation_data,eff=0.2)
         
         self.current_time=self.ewh.load_int.index[0]
@@ -109,37 +131,37 @@ class Home:
             ax_ev=self.ewh.load_int.plot(ylim=(0,3))
             ax_ev.set(xlabel='Time', ylabel='KWatt')
             ax_ev.set_title("Load Curve")
-            ax_ev.legend(["EWH"])
+            ax_ev.legend(["EWH"],fontsize=20)
             plt.show()
         elif appliance=="ev":
             ax_ev=self.ev.load_int.plot(ylim=(0,3))
             ax_ev.set(xlabel='Time', ylabel='KWatt')
             ax_ev.set_title("Load Curve")
-            ax_ev.legend(["EV"])
+            ax_ev.legend(["EV"],fontsize=20)
             plt.show()
         elif appliance=="wm":
             ax_ev=self.washing_machine.load_int.plot()
             ax_ev.set(xlabel='Time', ylabel='KWatt')
             ax_ev.set_title("Load Curve")
-            ax_ev.legend(["WM"])
+            ax_ev.legend(["WM"],fontsize=20)
             plt.show()
         elif appliance=="refrigerator":
             ax_ev=self.refrigerator.load_int.plot()
             ax_ev.set(xlabel='Time', ylabel='KWatt')
             ax_ev.set_title("Load Curve")
-            ax_ev.legend(["Refrigerator"])
+            ax_ev.legend(["Refrigerator"],fontsize=20)
             plt.show()
         elif appliance=="dryer":
             ax_ev=self.dryer.load_int.plot()
             ax_ev.set(xlabel='Time', ylabel='KWatt')
             ax_ev.set_title("Load Curve")
-            ax_ev.legend(["Dryer"])
+            ax_ev.legend(["Dryer"],fontsize=20)
             plt.show()
         elif appliance=="oven":
             ax_ev=self.oven.load_int.plot()
             ax_ev.set(xlabel='Time', ylabel='KWatt')
             ax_ev.set_title("Load Curve")
-            ax_ev.legend(["Oven"])
+            ax_ev.legend(["Oven"],fontsize=20)
             plt.show()
         elif appliance == "HVAC":
             ax_load=(self.HVAC.load_int).plot()
@@ -154,13 +176,13 @@ class Home:
             ax_temperature.plot(self.HVAC.temp_pred.index,self.order_HVAC["set_temperature"][1:96])
             ax_temperature.set(xlabel='Time', ylabel='°C')
             ax_temperature.set_title("Temperature Curve")
-            ax_temperature.legend(["Inside","Outside","Thermostat Set"])
+            ax_temperature.legend(["Inside","Outside","Thermostat Set"],fontsize=15)
             plt.show()
         elif appliance == "pv":
             ax_pv=self.PV.report.plot()
             ax_pv.set(xlabel='Time', ylabel='Generated KW')
             ax_pv.set_title("Load Curve")
-            ax_pv.legend(["PV"])
+            ax_pv.legend(["PV"],fontsize=20)
         elif appliance == "all":
             energy=self.ewh.load_int['EV']+\
             self.ev.load_int['EV']+\
