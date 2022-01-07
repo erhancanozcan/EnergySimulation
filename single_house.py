@@ -57,7 +57,7 @@ class Home:
         #self.HVAC=Heating(0.10,0.0000022,3,inside_tmp,time_resolution,heater_type)
         
         
-        solar_irradiation_data=pd.read_csv('/Users/can/Desktop/energy/code/solar_data/boston/2784951_42.38_-71.13_2018.csv') 
+        solar_irradiation_data=pd.read_csv('2784951_42.38_-71.13_2018.csv') 
         self.PV=PV(solar_panel_area,15,solar_irradiation_data,eff=0.2)
         
         self.current_time=self.ewh.load_int.index[0]
