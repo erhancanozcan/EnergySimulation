@@ -7,12 +7,12 @@ Created on Sat Jan  1 21:11:39 2022
 """
 import numpy as np
 import pandas as pd
-from ewh import SimpleWaterHeater
-from ev import ev
-from other_appliances import refrigerator
-from other_appliances import washing_machine,dryer,oven
-from HVAC import Heating
-from pv import PV
+from EnergySimulation.ewh import SimpleWaterHeater
+from EnergySimulation.ev import ev
+from EnergySimulation.other_appliances import refrigerator
+from EnergySimulation.other_appliances import washing_machine,dryer,oven
+from EnergySimulation.HVAC import Heating
+from EnergySimulation.pv import PV
 import matplotlib.pyplot as plt
 
 class Home:
