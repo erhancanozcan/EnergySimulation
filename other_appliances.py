@@ -36,7 +36,7 @@ class other_appliances:
         tmp=np.where(start_time>=time_periods)[0]
         s_index=tmp[len(tmp)-1]
         adjusted_start_time=time_periods[s_index]
-        print(adjusted_start_time)
+        #print(adjusted_start_time)
         
         how_many_step=int(math.ceil(self.duration/self.time_r))
         

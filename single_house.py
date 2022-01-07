@@ -57,7 +57,7 @@ class Home:
         #self.HVAC=Heating(0.10,0.0000022,3,inside_tmp,time_resolution,heater_type)
         
         
-        solar_irradiation_data=pd.read_csv('2784951_42.38_-71.13_2018.csv') 
+        solar_irradiation_data=pd.read_csv('/Users/can/Desktop/energy/code/solar_data/boston/2784951_42.38_-71.13_2018.csv') 
         self.PV=PV(solar_panel_area,15,solar_irradiation_data,eff=0.2)
         
         self.current_time=self.ewh.load_int.index[0]
@@ -142,23 +142,39 @@ class Home:
             ax_ev.legend(["Oven"])
             plt.show()
         elif appliance == "HVAC":
-            ax_load=self.HVAC.load_int.plot()
-            ax_load.set(xlabel='Time', ylabel='Watt')
+            ax_load=(self.HVAC.load_int).plot()
+            ax_load.set(xlabel='Time', ylabel='KWatt')
             ax_load.set_title("Load Curve")
-            ax_load.legend(["HVAC"])
+            ax_load.legend(["HVAC"],fontsize=20)
             plt.show()
+            
             
             ax_temperature=self.HVAC.temp_pred.plot()
             ax_temperature.plot(self.HVAC.temp_pred.index,self.outside_temp[1:96])
+            ax_temperature.plot(self.HVAC.temp_pred.index,self.order_HVAC["set_temperature"][1:96])
             ax_temperature.set(xlabel='Time', ylabel='°C')
             ax_temperature.set_title("Temperature Curve")
-            ax_temperature.legend(["Inside","Outside"])
+            ax_temperature.legend(["Inside","Outside","Thermostat Set"])
             plt.show()
         elif appliance == "pv":
             ax_pv=self.PV.report.plot()
             ax_pv.set(xlabel='Time', ylabel='Generated KW')
             ax_pv.set_title("Load Curve")
             ax_pv.legend(["PV"])
+        elif appliance == "all":
+            energy=self.ewh.load_int['EV']+\
+            self.ev.load_int['EV']+\
+            self.refrigerator.load_int['Energy']+\
+            self.washing_machine.load_int['Energy']+\
+            self.dryer.load_int['Energy']+\
+            self.oven.load_int['Energy']+\
+            self.HVAC.load_int['HVAC-in watts']
+            energy.index=self.HVAC.load_int.index
+            
+            ax_pv=energy.plot()
+            ax_pv.set(xlabel='Time', ylabel='KW')
+            ax_pv.set_title("Daily Load Curve")
+            ax_pv.legend(["Load"])    
         else:
             raise Exception(appliance, "not implemented")
             

@@ -66,7 +66,7 @@ class Heating:
             elif set_temp[i]<outside_temp[i] and tmp > set_temp[i] :
                 coef=-1   
             term2=coef*self.gamma2*(self.heater_efficiency*self.power_heater)
-            self.load_int.iloc[i,0]=abs(coef)*((self.power_heater)/(60*self.time_r)+0*abs(set_temp[i]-tmp)*100)
+            self.load_int.iloc[i,0]=abs(coef)*((self.power_heater)/(60*self.time_r)/1000.0+0*abs(set_temp[i]-tmp)*100)
             
             term3=self.gamma3*self.solar_irradiation
             
