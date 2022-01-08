@@ -18,6 +18,8 @@ from datetime import datetime
 
 class Home:
     def __init__(self,outside_temp,house_type,heating_season,dt_obj,wh_type=1,ev_type=1,heater_type=1,solar_panel_area=10,inside_tmp=22.0,tap_water_temp=4,time_resolution=15):
+        
+        np.random.seed(abs(int(outside_temp[0])))
         self.outside_temp=outside_temp
         self.house_type=house_type
         self.dt_obj=dt_obj
