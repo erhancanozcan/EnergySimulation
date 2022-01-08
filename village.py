@@ -85,7 +85,7 @@ def village_plot(village,app_type,num_houses):
         ax_ev=tmp.plot()
         ax_ev.set(xlabel='Time', ylabel='KWatt')
         ax_ev.set_title("Load Curve")
-        ax_ev.legend(["WM"],fontsize=20)
+        ax_ev.legend(["Refrigerator"],fontsize=20)
         plt.show()
     elif app_type=="dryer":
         
@@ -102,7 +102,7 @@ def village_plot(village,app_type,num_houses):
         ax_ev=tmp.plot()
         ax_ev.set(xlabel='Time', ylabel='KWatt')
         ax_ev.set_title("Load Curve")
-        ax_ev.legend(["WM"],fontsize=20)
+        ax_ev.legend(["Dryer"],fontsize=20)
         plt.show()
     elif app_type=="oven":
         
@@ -119,7 +119,7 @@ def village_plot(village,app_type,num_houses):
         ax_ev=tmp.plot()
         ax_ev.set(xlabel='Time', ylabel='KWatt')
         ax_ev.set_title("Load Curve")
-        ax_ev.legend(["WM"],fontsize=20)
+        ax_ev.legend(["Oven"],fontsize=20)
         plt.show()
         
     elif app_type=="HVAC":
@@ -137,7 +137,7 @@ def village_plot(village,app_type,num_houses):
         ax_ev=tmp.plot()
         ax_ev.set(xlabel='Time', ylabel='KWatt')
         ax_ev.set_title("Load Curve")
-        ax_ev.legend(["EWH"],fontsize=20)
+        ax_ev.legend(["HVAC"],fontsize=20)
         plt.show()
 
  
