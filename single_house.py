@@ -79,6 +79,16 @@ class Home:
         start_index=np.where(dt_obj.date()==solar_irradiation_data.index.date)[0][0]
         #solar_irradiation_data=solar_irradiation_data.iloc[start_index:,:].values
         solar_irradiation_data=solar_irradiation_data.iloc[start_index:,:]
+
+
+        #this part create randomness for each house in solar data
+        zeros=(solar_irradiation_data==0)
+        tmp=np.random.normal(0,20,solar_irradiation_data.shape)
+        tmp[zeros]=0
+        solar_irradiation_data=solar_irradiation_data+tmp
+        solar_irradiation_data=abs(solar_irradiation_data)
+        #solar_irradiation_data[solar_irradiation_data<0]=0
+        ###end of randomdness in solar.
         
         self.PV=PV(solar_panel_area,15,solar_irradiation_data,eff=0.2)
         
