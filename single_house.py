@@ -29,9 +29,9 @@ class Home:
         elif house_type["insulation"] =="high":
             gamma1=np.random.normal(0.10,0.001)
         if house_type["size"] =="small":
-            gamma2=np.random.normal(0.0000020,0.0000001)
+            gamma2=np.random.normal(0.0000032,0.0000001)
         elif house_type["size"] =="large":
-            gamma2=np.random.normal(0.0000020,0.0000001)
+            gamma2=np.random.normal(0.0000023,0.0000001)
         
         
         
@@ -105,7 +105,7 @@ class Home:
         self.order_HVAC=order_HVAC
         
         #you must get HVAC order at every iteration!!!
-        self.HVAC.simulate_temperature(self.outside_temp, order_HVAC["set_temperature"])
+        self.HVAC.simulate_temperature(self.outside_temp, order_HVAC["set_temperature"],order_HVAC["deadband"])
         
         
         if order_ewh['order_status'] == 1:

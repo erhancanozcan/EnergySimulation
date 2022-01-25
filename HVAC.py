@@ -50,7 +50,7 @@ class Heating:
         #self.temperature=self.temperature.set_index(time_periods)
         #self.temperature['°C']=0
         
-    def simulate_temperature(self,outside_temp,set_temp):
+    def simulate_temperature(self,outside_temp,set_temp,deadband):
         #deadbandwidth adjustment!!!!
         pred=[None]*(self.nrow-1)
         tmp=self.inside_temp
@@ -66,10 +66,11 @@ class Heating:
             #    coef=1
             #elif set_temp[i]<outside_temp[i] and tmp > set_temp[i] :
             #    coef=-1  
-            elif self.heating_season==1 and tmp < set_temp[i] :
+            elif self.heating_season==1 and tmp < set_temp[i] - deadband :
                 coef=1
-            elif self.heating_season==-1 and tmp > set_temp[i] :
-                coef=-1                  
+            elif self.heating_season==-1 and tmp > set_temp[i] + deadband :
+                coef=-1
+                self.power_heater=2000*(60*self.time_r)  
             term2=coef*self.gamma2*(self.heater_efficiency*self.power_heater)
             self.load_int.iloc[i,0]=abs(coef)*((self.power_heater)/(60*self.time_r)/1000.0+0*abs(set_temp[i]-tmp)*100)
             
