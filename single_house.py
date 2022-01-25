@@ -42,6 +42,8 @@ class Home:
         self.time_resolution=time_resolution
         self.inside_tmp=inside_tmp
         self.tap_water_temp=tap_water_temp
+        if heating_season == -1:
+            self.tap_water_temp=18
 
         
         
